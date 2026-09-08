@@ -12,6 +12,16 @@
   <link rel="stylesheet" href="stylesheet.css">
 </head>
 <body>
+  <div class="lock-screen" id="lockScreen">
+    <div class="lock-card">
+      <div class="seal">✦</div>
+      <p class="eyebrow">a private little surprise</p>
+      <h2>Enter the secret<br><em>to open this.</em></h2>
+      <input id="passcode" class="passcode" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="Passcode">
+      <button class="primary-btn" id="unlockButton">unlock <span>→</span></button>
+      <p class="lock-error" id="lockError">That is not it, try again.</p>
+    </div>
+  </div>
   <div class="grain"></div>
   <div class="ambient ambient-one"></div>
   <div class="ambient ambient-two"></div>
@@ -39,7 +49,7 @@
         </div>
         <div class="portrait-card reveal delay-one">
           <div class="portrait-glow"></div>
-          <img src="banner.png" alt="Happy Birthday NANDHITHA S">
+          <img src="assets/her-smile.jpg" alt="NANDHITHA smiling">
           <span class="card-caption">made with a full heart</span>
         </div>
       </div>
@@ -58,6 +68,7 @@
         <button class="text-btn next-btn">there is one more thing <span>↓</span></button>
       </div>
       <div class="hand-orbit" aria-hidden="true"><span>♡</span></div>
+      <img class="hand-photo" src="assets/her-hand.jpg" alt="NANDHITHA's hand">
     </section>
 
     <section class="scene touch" id="touch">
@@ -70,10 +81,12 @@
           <p class="soft-note">Your childhood photo will live here, with the fingertip aligned to my lips.</p>
         </div>
         <div class="touch-frame reveal delay-one">
-          <div class="photo-placeholder">
+          <div class="touch-composite">
+            <img class="childhood-photo" src="assets/her-pointing-finger.jpg" alt="NANDHITHA as a child pointing">
+            <img class="lips-photo" src="assets/my-lips.jpg" alt="My lips aligned with her fingertip">
             <span class="placeholder-heart">♡</span>
-            <strong>Your special photo</strong>
-            <small>childhood image goes here</small>
+            <strong>your touch feels like home</strong>
+            <small>the moment at 1:19</small>
           </div>
           <div class="lip-target"><span>touch</span></div>
           <div class="touch-pulse"></div>
@@ -100,6 +113,10 @@
         <div class="eyebrow">today is yours</div>
         <h2>Happy Birthday,<br><em>NANDHITHA S</em></h2>
         <p>May your days be as beautiful as your smile.</p>
+        <img class="childhood-card" src="assets/her-childhood.jpg" alt="NANDHITHA as a child">
+        <div class="memory-strip" aria-label="Our memories">
+          <img src="assets/us-1.jpg" alt="Our memory 1"><img src="assets/us-2.jpg" alt="Our memory 2"><img src="assets/us-3.jpg" alt="Our memory 3"><img src="assets/us-4.jpg" alt="Our memory 4"><img src="assets/us-5.jpg" alt="Our memory 5"><img src="assets/us-6.jpg" alt="Our memory 6">
+        </div>
         <button class="primary-btn next-btn">one last thing <span>→</span></button>
       </div>
     </section>

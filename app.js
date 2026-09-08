@@ -7,8 +7,27 @@ const nextButtons = [...document.querySelectorAll('.next-btn')];
 const touchScene = document.getElementById('touch');
 const touchFrame = document.querySelector('.touch-frame');
 const touchCueSeconds = 79;
+const lockScreen = document.getElementById('lockScreen');
+const passcodeInput = document.getElementById('passcode');
+const unlockButton = document.getElementById('unlockButton');
+const lockError = document.getElementById('lockError');
 let musicOn = false;
 let touchCueTriggered = false;
+
+function unlock() {
+  if (passcodeInput.value === '3733') {
+    lockScreen.classList.add('unlocked');
+    passcodeInput.blur();
+  } else {
+    lockError.classList.add('show');
+    passcodeInput.value = '';
+  }
+}
+
+unlockButton.addEventListener('click', unlock);
+passcodeInput.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') unlock();
+});
 
 function startMusic() {
   music.play().then(() => {
