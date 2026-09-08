@@ -151,6 +151,37 @@ music.addEventListener('timeupdate', () => {
     touchCueTriggered = true;
     touchScene.classList.add('cue-active');
     touchFrame.classList.add('touch-arrived');
+    
+    // Trigger sophisticated animations
+    const childhoodPhoto = touchScene.querySelector('.childhood-photo');
+    const lipsPhoto = touchScene.querySelector('.lips-photo');
+    const touchGlow = touchScene.querySelector('.touch-glow');
+    const touchHearts = touchScene.querySelector('.touch-hearts');
+    
+    if (childhoodPhoto) childhoodPhoto.classList.add('zoom-active');
+    if (lipsPhoto) lipsPhoto.classList.add('fade-active');
+    if (touchGlow) touchGlow.classList.add('glow-active');
+    
+    // Create floating hearts at touch point
+    if (touchHearts) {
+      for (let i = 0; i < 8; i++) {
+        setTimeout(() => {
+          const heart = document.createElement('span');
+          heart.className = 'floating-heart';
+          heart.textContent = '♡';
+          heart.style.position = 'absolute';
+          heart.style.fontSize = (8 + Math.random() * 12) + 'px';
+          heart.style.color = 'var(--rose)';
+          heart.style.opacity = '1';
+          heart.style.animation = `floatingHeart ${1.2 + Math.random() * 0.8}s ease-out forwards`;
+          heart.style.left = (Math.random() * 40 - 20) + 'px';
+          heart.style.top = (Math.random() * 40 - 20) + 'px';
+          touchHearts.appendChild(heart);
+          setTimeout(() => heart.remove(), 2000);
+        }, i * 150);
+      }
+    }
+    
     showScene(scenes.indexOf(touchScene));
     burstHearts(16);
   }
@@ -162,6 +193,18 @@ replayButton.addEventListener('click', () => {
   touchCueTriggered = false;
   touchScene.classList.remove('cue-active');
   touchFrame.classList.remove('touch-arrived');
+  
+  // Reset animations
+  const childhoodPhoto = touchScene.querySelector('.childhood-photo');
+  const lipsPhoto = touchScene.querySelector('.lips-photo');
+  const touchGlow = touchScene.querySelector('.touch-glow');
+  const touchHearts = touchScene.querySelector('.touch-hearts');
+  
+  if (childhoodPhoto) childhoodPhoto.classList.remove('zoom-active');
+  if (lipsPhoto) lipsPhoto.classList.remove('fade-active');
+  if (touchGlow) touchGlow.classList.remove('glow-active');
+  if (touchHearts) touchHearts.innerHTML = '';
+  
   showScene(0);
   burstHearts(5);
 });
