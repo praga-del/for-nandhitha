@@ -20,9 +20,22 @@ let musicOn = false;
 let touchCueTriggered = false;
 let currentSceneIndex = 0;
 
+// Passcode display animation
+function animatePasscodeDisplay(type = 'input') {
+  passcodeDisplay.classList.remove('shake', 'success');
+  if (type === 'shake') {
+    passcodeDisplay.offsetHeight; // Trigger reflow
+    passcodeDisplay.classList.add('shake');
+  } else if (type === 'success') {
+    passcodeDisplay.offsetHeight; // Trigger reflow
+    passcodeDisplay.classList.add('success');
+  }
+}
+
 // Keypad functionality
 function updatePasscodeDisplay() {
   passcodeDisplay.textContent = '•'.repeat(passcodeValue.length).padEnd(4, '•');
+  animatePasscodeDisplay('input');
 }
 
 keypadBtns.forEach((btn) => {
@@ -38,9 +51,11 @@ keypadBtns.forEach((btn) => {
 });
 
 keypadDelete.addEventListener('click', () => {
-  passcodeValue = passcodeValue.slice(0, -1);
-  updatePasscodeDisplay();
-  lockError.classList.remove('show');
+  if (passcodeValue.length > 0) {
+    passcodeValue = passcodeValue.slice(0, -1);
+    updatePasscodeDisplay();
+    lockError.classList.remove('show');
+  }
 });
 
 keypadClear.addEventListener('click', () => {
@@ -57,21 +72,39 @@ unlockButton.addEventListener('click', () => {
 
 function checkPasscode() {
   if (passcodeValue === '3733') {
-    lockScreen.classList.add('unlocked');
+    animatePasscodeDisplay('success');
+    setTimeout(() => {
+      lockScreen.classList.add('unlocked');
+      startMusic(); // Start music immediately on correct passcode
+      showScene(0);
+    }, 600);
   } else {
+    animatePasscodeDisplay('shake');
     lockError.classList.add('show');
-    passcodeValue = '';
-    updatePasscodeDisplay();
+    setTimeout(() => {
+      passcodeValue = '';
+      updatePasscodeDisplay();
+      lockError.classList.remove('show');
+    }, 600);
   }
 }
 
-// Wizard scene management
+// Music functionality
+function startMusic() {
+  music.play().then(() => {
+    musicOn = true;
+    musicControl.querySelector('span').textContent = 'music on';
+  }).catch(() => {
+    musicControl.querySelector('span').textContent = 'tap for music';
+  });
+}
+
+// Wizard scene management with transitions
 function showScene(index) {
   scenes.forEach((scene) => scene.classList.remove('active'));
   if (index >= 0 && index < scenes.length) {
     scenes[index].classList.add('active');
     currentSceneIndex = index;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
 
@@ -87,31 +120,21 @@ function prevScene() {
   }
 }
 
-// Initial setup
-showScene(0);
-
-// Music functionality
-function startMusic() {
-  music.play().then(() => {
-    musicOn = true;
-    musicControl.querySelector('span').textContent = 'music on';
-  }).catch(() => {
-    musicControl.querySelector('span').textContent = 'tap for music';
-  });
-}
-
+// Open surprise button
 openButton.addEventListener('click', () => {
-  startMusic();
   nextScene();
   burstHearts(9);
 });
 
+// Next buttons
 nextButtons.forEach((button) => {
   button.addEventListener('click', () => {
     nextScene();
+    burstHearts(5);
   });
 });
 
+// Music control
 musicControl.addEventListener('click', () => {
   if (music.paused) {
     startMusic();
@@ -122,6 +145,7 @@ musicControl.addEventListener('click', () => {
   }
 });
 
+// Music cue for touch scene
 music.addEventListener('timeupdate', () => {
   if (!touchCueTriggered && music.currentTime >= touchCueSeconds) {
     touchCueTriggered = true;
@@ -132,6 +156,7 @@ music.addEventListener('timeupdate', () => {
   }
 });
 
+// Replay
 replayButton.addEventListener('click', () => {
   music.currentTime = 0;
   touchCueTriggered = false;
@@ -141,6 +166,7 @@ replayButton.addEventListener('click', () => {
   burstHearts(5);
 });
 
+// Intersection observer for animations
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
@@ -152,6 +178,7 @@ const observer = new IntersectionObserver((entries) => {
 
 scenes.forEach((scene) => observer.observe(scene));
 
+// Click for hearts
 document.addEventListener('pointerdown', (event) => {
   if (event.target.closest('button') || event.target.closest('.music-control')) return;
   if (Math.random() > 0.72) createHeart(event.clientX, event.clientY);
