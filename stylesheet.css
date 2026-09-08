@@ -1,0 +1,44 @@
+* { box-sizing: border-box; }
+:root { --ink:#f9edf0; --muted:#c8aeb8; --rose:#ee9eae; --peach:#ffc8a9; --night:#160d1d; --card:rgba(255,243,245,.08); --line:rgba(255,213,221,.2); }
+html { scroll-behavior:smooth; }
+body { margin:0; color:var(--ink); background:var(--night); font-family:'DM Sans',sans-serif; overflow-x:hidden; }
+body::before { content:''; position:fixed; inset:0; z-index:-3; background:radial-gradient(circle at 50% 15%,#4e2739 0,#211122 42%,#100911 100%); }
+.grain { position:fixed; inset:0; z-index:5; pointer-events:none; opacity:.08; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.32'/%3E%3C/svg%3E"); }
+.ambient { position:fixed; width:38vw; height:38vw; border-radius:50%; filter:blur(90px); opacity:.22; pointer-events:none; z-index:-1; }
+.ambient-one { top:10vh; left:-15vw; background:#d96487; } .ambient-two { right:-15vw; bottom:6vh; background:#f1a26d; }
+main { position:relative; }
+.scene { min-height:100svh; padding:9vh 8vw 12vh; position:relative; display:grid; place-items:center; isolation:isolate; overflow:hidden; }
+.scene::after { content:''; position:absolute; inset:auto 8vw 6vh; height:1px; background:linear-gradient(90deg,transparent,var(--line),transparent); }
+.section-number { position:absolute; top:34px; right:8vw; color:var(--muted); font-size:11px; letter-spacing:.18em; text-transform:uppercase; }
+.eyebrow,.kicker { margin:0 0 18px; text-transform:uppercase; letter-spacing:.22em; font-size:10px; color:var(--rose); } .kicker { color:var(--peach); text-align:center; }
+h1,h2,p { margin-top:0; } h1,h2 { font-family:'Cormorant Garamond',serif; font-weight:500; line-height:.92; }
+h1 { font-size:clamp(62px,14vw,170px); text-align:center; letter-spacing:-.04em; margin:0 0 25px; } h1 span { color:var(--rose); font-style:italic; }
+h2 { font-size:clamp(48px,7vw,96px); letter-spacing:-.045em; margin-bottom:26px; } h2 em { color:var(--peach); font-style:italic; }
+p { color:var(--muted); line-height:1.75; font-size:15px; }
+.opening { text-align:center; } .opening .eyebrow { position:absolute; top:34px; left:8vw; }
+.seal,.final-star { display:grid; place-items:center; width:45px; height:45px; margin:0 auto 38px; border:1px solid var(--line); border-radius:50%; color:var(--peach); font-size:18px; }
+.opening-copy { max-width:340px; margin:0 auto 34px; } .tiny-note { font-size:10px; letter-spacing:.12em; margin-top:16px; color:#9c7c88; }
+.primary-btn,.text-btn { border:0; cursor:pointer; font:inherit; transition:transform .25s ease,background .25s ease; }
+.primary-btn { background:var(--peach); color:#321627; padding:16px 23px; border-radius:999px; font-size:12px; letter-spacing:.08em; } .primary-btn span,.text-btn span { margin-left:13px; font-size:17px; } .primary-btn:hover { transform:translateY(-3px); background:#ffe0c9; }
+.text-btn { padding:0; background:none; color:var(--peach); font-size:11px; letter-spacing:.14em; text-transform:uppercase; } .text-btn:hover { transform:translateY(3px); }
+.welcome-layout,.touch-layout { width:min(1050px,100%); display:grid; grid-template-columns:1fr .9fr; gap:9vw; align-items:center; }
+.welcome-copy p,.touch-copy p { max-width:430px; } .welcome-copy .text-btn,.touch-copy .text-btn { margin-top:18px; }
+.portrait-card { position:relative; padding:30px; border:1px solid var(--line); background:var(--card); transform:rotate(2.5deg); box-shadow:0 30px 70px rgba(0,0,0,.3); }
+.portrait-card::before { content:''; position:absolute; inset:11px; border:1px solid rgba(255,255,255,.08); } .portrait-card img { width:100%; display:block; position:relative; opacity:.9; }
+.card-caption { display:block; padding-top:18px; font:22px 'Parisienne',cursive; color:var(--peach); text-align:center; }
+.center-copy { text-align:center; max-width:750px; z-index:1; } .center-copy .eyebrow { margin-bottom:25px; } .warmth-lines { margin:35px auto; max-width:440px; } .warmth-lines p { margin:6px 0; }
+.hand-orbit { width:min(310px,70vw); aspect-ratio:1; position:absolute; right:-5vw; bottom:-12vw; border:1px solid rgba(255,200,169,.22); border-radius:50%; box-shadow:0 0 0 30px rgba(255,200,169,.03),0 0 0 60px rgba(255,200,169,.02); }
+.hand-orbit span { position:absolute; top:12%; left:17%; color:var(--rose); font-size:42px; animation:float 4s ease-in-out infinite; }
+.touch-copy p { max-width:440px; } .soft-note { font-size:12px; color:var(--rose); border-left:1px solid var(--rose); padding-left:14px; margin-top:28px; }
+.touch-frame { position:relative; width:min(390px,80vw); aspect-ratio:4/5; display:grid; place-items:center; border:1px solid var(--line); background:linear-gradient(145deg,rgba(246,173,164,.16),rgba(38,15,34,.7)); box-shadow:0 25px 80px rgba(0,0,0,.34); }
+.photo-placeholder { width:78%; height:78%; display:grid; place-items:center; align-content:center; text-align:center; border:1px dashed rgba(255,200,169,.45); color:var(--peach); }
+.photo-placeholder strong { font:28px 'Cormorant Garamond',serif; display:block; } .photo-placeholder small { display:block; color:var(--muted); margin-top:7px; font-size:10px; letter-spacing:.12em; text-transform:uppercase; } .placeholder-heart { font-size:40px; margin-bottom:15px; color:var(--rose); }
+.lip-target { position:absolute; top:57%; left:61%; width:54px; height:54px; border-radius:50%; border:1px solid var(--peach); display:grid; place-items:center; background:rgba(255,200,169,.12); } .lip-target span { position:absolute; top:60px; color:var(--peach); font-size:10px; text-transform:uppercase; letter-spacing:.14em; } .touch-pulse { position:absolute; top:calc(57% + 1px); left:calc(61% + 1px); width:52px; height:52px; border-radius:50%; border:1px solid var(--rose); animation:pulse 2.4s infinite; }
+.wish-card,.final-copy { max-width:800px; text-align:center; } .wish-mark { font:100px/0.5 'Cormorant Garamond',serif; color:var(--rose); height:55px; } .wish-card h2 { margin-bottom:20px; }
+.celebration { background:radial-gradient(circle at 50% 30%,rgba(207,91,106,.2),transparent 55%); } .celebration-card { text-align:center; } .cake-wrap { width:min(560px,88vw); height:min(300px,42vh); margin:0 auto 38px; overflow:hidden; border:1px solid var(--line); } .cake-wrap img { width:100%; height:100%; object-fit:cover; object-position:center 55%; filter:saturate(.9) contrast(1.03); } .celebration-card h2 { margin-bottom:15px; }
+.final { text-align:center; background:radial-gradient(circle at 50% 50%,rgba(238,158,174,.16),transparent 48%); } .final-star { margin-bottom:35px; } .tamil-message { color:var(--peach); font-size:clamp(20px,3vw,33px); line-height:1.35; letter-spacing:.14em; margin:30px 0 25px; } .signature { font:30px 'Parisienne',cursive; color:var(--rose); } .signature span { font-family:sans-serif; font-size:18px; }
+.music-control { position:fixed; z-index:8; bottom:22px; left:22px; border:1px solid var(--line); border-radius:999px; padding:10px 13px; background:rgba(22,13,29,.72); backdrop-filter:blur(8px); color:var(--peach); cursor:pointer; font-size:15px; } .music-control span { font-size:9px; letter-spacing:.1em; text-transform:uppercase; margin-left:5px; }
+#hearts { position:fixed; inset:0; pointer-events:none; z-index:3; overflow:hidden; } .heart { position:absolute; bottom:-30px; color:var(--rose); animation:rise 7s linear forwards; opacity:0; }
+.reveal { opacity:0; transform:translateY(24px); transition:opacity 1s ease,transform 1s ease; } .scene.is-visible .reveal { opacity:1; transform:none; } .delay-one { transition-delay:.18s; }
+@keyframes float { 50% { transform:translate(14px,-18px) rotate(8deg); } } @keyframes pulse { 0%,100% { transform:scale(.8); opacity:.05; } 45% { transform:scale(1.8); opacity:.6; } } @keyframes rise { 0% { transform:translateY(0) rotate(0); opacity:0; } 15% { opacity:.7; } 100% { transform:translateY(-110vh) rotate(30deg); opacity:0; } }
+@media (max-width:720px) { .scene { padding:82px 24px 100px; } .opening .eyebrow { left:24px; right:24px; top:30px; text-align:center; } .section-number { right:24px; } .welcome-layout,.touch-layout { grid-template-columns:1fr; gap:42px; } .welcome-copy,.touch-copy { text-align:center; } .welcome-copy p,.touch-copy p { margin-left:auto; margin-right:auto; } .portrait-card { width:min(350px,85vw); margin:0 auto; } .touch-frame { margin:0 auto; } .touch .text-btn { margin-top:38px; } .hand-orbit { right:-28vw; bottom:-18vw; } .cake-wrap { height:220px; } .music-control { bottom:15px; left:15px; } }
