@@ -8,27 +8,89 @@ const touchScene = document.getElementById('touch');
 const touchFrame = document.querySelector('.touch-frame');
 const touchCueSeconds = 79;
 const lockScreen = document.getElementById('lockScreen');
-const passcodeInput = document.getElementById('passcode');
+const passcodeDisplay = document.getElementById('passcodeDisplay');
 const unlockButton = document.getElementById('unlockButton');
 const lockError = document.getElementById('lockError');
+const keypadBtns = [...document.querySelectorAll('.keypad-btn[data-value]')];
+const keypadClear = document.getElementById('keypadClear');
+const keypadDelete = document.getElementById('keypadDelete');
+
+let passcodeValue = '';
 let musicOn = false;
 let touchCueTriggered = false;
+let currentSceneIndex = 0;
 
-function unlock() {
-  if (passcodeInput.value === '3733') {
+// Keypad functionality
+function updatePasscodeDisplay() {
+  passcodeDisplay.textContent = '•'.repeat(passcodeValue.length).padEnd(4, '•');
+}
+
+keypadBtns.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    if (passcodeValue.length < 4) {
+      passcodeValue += btn.dataset.value;
+      updatePasscodeDisplay();
+      if (passcodeValue.length === 4) {
+        checkPasscode();
+      }
+    }
+  });
+});
+
+keypadDelete.addEventListener('click', () => {
+  passcodeValue = passcodeValue.slice(0, -1);
+  updatePasscodeDisplay();
+  lockError.classList.remove('show');
+});
+
+keypadClear.addEventListener('click', () => {
+  passcodeValue = '';
+  updatePasscodeDisplay();
+  lockError.classList.remove('show');
+});
+
+unlockButton.addEventListener('click', () => {
+  if (passcodeValue.length === 4) {
+    checkPasscode();
+  }
+});
+
+function checkPasscode() {
+  if (passcodeValue === '3733') {
     lockScreen.classList.add('unlocked');
-    passcodeInput.blur();
   } else {
     lockError.classList.add('show');
-    passcodeInput.value = '';
+    passcodeValue = '';
+    updatePasscodeDisplay();
   }
 }
 
-unlockButton.addEventListener('click', unlock);
-passcodeInput.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter') unlock();
-});
+// Wizard scene management
+function showScene(index) {
+  scenes.forEach((scene) => scene.classList.remove('active'));
+  if (index >= 0 && index < scenes.length) {
+    scenes[index].classList.add('active');
+    currentSceneIndex = index;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
 
+function nextScene() {
+  if (currentSceneIndex < scenes.length - 1) {
+    showScene(currentSceneIndex + 1);
+  }
+}
+
+function prevScene() {
+  if (currentSceneIndex > 0) {
+    showScene(currentSceneIndex - 1);
+  }
+}
+
+// Initial setup
+showScene(0);
+
+// Music functionality
 function startMusic() {
   music.play().then(() => {
     musicOn = true;
@@ -38,21 +100,15 @@ function startMusic() {
   });
 }
 
-function scrollToScene(id) {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-}
-
 openButton.addEventListener('click', () => {
   startMusic();
-  scrollToScene('welcome');
+  nextScene();
   burstHearts(9);
 });
 
 nextButtons.forEach((button) => {
   button.addEventListener('click', () => {
-    const current = button.closest('.scene');
-    const next = current?.nextElementSibling;
-    if (next?.classList.contains('scene')) scrollToScene(next.id);
+    nextScene();
   });
 });
 
@@ -71,7 +127,7 @@ music.addEventListener('timeupdate', () => {
     touchCueTriggered = true;
     touchScene.classList.add('cue-active');
     touchFrame.classList.add('touch-arrived');
-    scrollToScene('touch');
+    showScene(scenes.indexOf(touchScene));
     burstHearts(16);
   }
 });
@@ -81,7 +137,7 @@ replayButton.addEventListener('click', () => {
   touchCueTriggered = false;
   touchScene.classList.remove('cue-active');
   touchFrame.classList.remove('touch-arrived');
-  scrollToScene('opening');
+  showScene(0);
   burstHearts(5);
 });
 
