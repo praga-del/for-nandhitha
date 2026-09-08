@@ -4,7 +4,11 @@ const openButton = document.getElementById('openSurprise');
 const replayButton = document.getElementById('replay');
 const scenes = [...document.querySelectorAll('.scene')];
 const nextButtons = [...document.querySelectorAll('.next-btn')];
+const touchScene = document.getElementById('touch');
+const touchFrame = document.querySelector('.touch-frame');
+const touchCueSeconds = 79;
 let musicOn = false;
+let touchCueTriggered = false;
 
 function startMusic() {
   music.play().then(() => {
@@ -43,7 +47,21 @@ musicControl.addEventListener('click', () => {
   }
 });
 
+music.addEventListener('timeupdate', () => {
+  if (!touchCueTriggered && music.currentTime >= touchCueSeconds) {
+    touchCueTriggered = true;
+    touchScene.classList.add('cue-active');
+    touchFrame.classList.add('touch-arrived');
+    scrollToScene('touch');
+    burstHearts(16);
+  }
+});
+
 replayButton.addEventListener('click', () => {
+  music.currentTime = 0;
+  touchCueTriggered = false;
+  touchScene.classList.remove('cue-active');
+  touchFrame.classList.remove('touch-arrived');
   scrollToScene('opening');
   burstHearts(5);
 });
