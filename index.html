@@ -96,15 +96,26 @@
           <p class="soft-note">Your childhood photo will live here, with the fingertip aligned to my lips.</p>
         </div>
         <div class="touch-frame reveal delay-one">
+          <!-- Background: Childhood image with zoom effect -->
           <div class="touch-composite">
             <img class="childhood-photo" src="assets/her-pointing-finger.jpg" alt="NANDHITHA as a child pointing">
-            <img class="lips-photo" src="assets/my-lips.jpg" alt="My lips aligned with her fingertip">
-            <span class="placeholder-heart">♡</span>
+            
+            <!-- Foreground: Lips image with fade and position animation -->
+            <div class="lips-container">
+              <img class="lips-photo" src="assets/my-lips.jpg" alt="My lips aligned with her fingertip">
+            </div>
+            
+            <!-- Touch point indicators -->
+            <div class="lip-target"><span>touch</span></div>
+            <div class="touch-pulse"></div>
+            <div class="touch-glow"></div>
+            
+            <!-- Floating hearts at touch point -->
+            <div class="touch-hearts" aria-hidden="true"></div>
+            
             <strong>your touch feels like home</strong>
             <small>the moment at 1:19</small>
           </div>
-          <div class="lip-target"><span>touch</span></div>
-          <div class="touch-pulse"></div>
         </div>
       </div>
       <button class="text-btn next-btn">one simple wish <span>↓</span></button>
