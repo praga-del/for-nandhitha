@@ -5,7 +5,6 @@ const replayButton = document.getElementById('replay');
 const scenes = [...document.querySelectorAll('.scene')];
 const nextButtons = [...document.querySelectorAll('.next-btn')];
 const touchScene = document.getElementById('touch');
-const touchFrame = document.querySelector('.touch-frame');
 const touchCueSeconds = 79;
 const lockScreen = document.getElementById('lockScreen');
 const passcodeDisplay = document.getElementById('passcodeDisplay');
@@ -24,10 +23,10 @@ let currentSceneIndex = 0;
 function animatePasscodeDisplay(type = 'input') {
   passcodeDisplay.classList.remove('shake', 'success');
   if (type === 'shake') {
-    passcodeDisplay.offsetHeight; // Trigger reflow
+    passcodeDisplay.offsetHeight;
     passcodeDisplay.classList.add('shake');
   } else if (type === 'success') {
-    passcodeDisplay.offsetHeight; // Trigger reflow
+    passcodeDisplay.offsetHeight;
     passcodeDisplay.classList.add('success');
   }
 }
@@ -75,7 +74,7 @@ function checkPasscode() {
     animatePasscodeDisplay('success');
     setTimeout(() => {
       lockScreen.classList.add('unlocked');
-      startMusic(); // Start music immediately on correct passcode
+      startMusic();
       showScene(0);
     }, 600);
   } else {
@@ -89,7 +88,6 @@ function checkPasscode() {
   }
 }
 
-// Music functionality
 function startMusic() {
   music.play().then(() => {
     musicOn = true;
@@ -99,7 +97,6 @@ function startMusic() {
   });
 }
 
-// Wizard scene management with transitions
 function showScene(index) {
   scenes.forEach((scene) => scene.classList.remove('active'));
   if (index >= 0 && index < scenes.length) {
@@ -120,13 +117,11 @@ function prevScene() {
   }
 }
 
-// Open surprise button
 openButton.addEventListener('click', () => {
   nextScene();
   burstHearts(9);
 });
 
-// Next buttons
 nextButtons.forEach((button) => {
   button.addEventListener('click', () => {
     nextScene();
@@ -134,7 +129,6 @@ nextButtons.forEach((button) => {
   });
 });
 
-// Music control
 musicControl.addEventListener('click', () => {
   if (music.paused) {
     startMusic();
@@ -145,61 +139,62 @@ musicControl.addEventListener('click', () => {
   }
 });
 
-// Music cue for touch scene
 music.addEventListener('timeupdate', () => {
   if (!touchCueTriggered && music.currentTime >= touchCueSeconds) {
     touchCueTriggered = true;
-    touchScene.classList.add('cue-active');
-    touchFrame.classList.add('touch-arrived');
-    
-    // Trigger sophisticated animations
-    const childhoodPhoto = touchScene.querySelector('.childhood-photo');
-    const lipsPhoto = touchScene.querySelector('.lips-photo');
-    const touchGlow = touchScene.querySelector('.touch-glow');
-    const touchHearts = touchScene.querySelector('.touch-hearts');
-    
-    if (childhoodPhoto) childhoodPhoto.classList.add('zoom-active');
-    if (lipsPhoto) lipsPhoto.classList.add('fade-active');
-    if (touchGlow) touchGlow.classList.add('glow-active');
-    
-    // Create floating hearts at touch point
-    if (touchHearts) {
-      for (let i = 0; i < 8; i++) {
-        setTimeout(() => {
-          const heart = document.createElement('span');
-          heart.className = 'floating-heart';
-          heart.textContent = '♡';
-          heart.style.position = 'absolute';
-          heart.style.fontSize = (8 + Math.random() * 12) + 'px';
-          heart.style.color = 'var(--rose)';
-          heart.style.opacity = '1';
-          heart.style.animation = `floatingHeart ${1.2 + Math.random() * 0.8}s ease-out forwards`;
-          heart.style.left = (Math.random() * 40 - 20) + 'px';
-          heart.style.top = (Math.random() * 40 - 20) + 'px';
-          touchHearts.appendChild(heart);
-          setTimeout(() => heart.remove(), 2000);
-        }, i * 150);
-      }
-    }
-    
     showScene(scenes.indexOf(touchScene));
-    burstHearts(16);
+    
+    setTimeout(() => {
+      const touchComposite = touchScene.querySelector('.touch-composite');
+      if (touchComposite) {
+        touchComposite.classList.add('touch-arrived');
+      }
+      
+      const childhoodPhoto = touchScene.querySelector('.childhood-photo');
+      const lipsPhoto = touchScene.querySelector('.lips-photo');
+      const touchGlow = touchScene.querySelector('.touch-glow');
+      const touchHearts = touchScene.querySelector('.touch-hearts');
+      
+      if (childhoodPhoto) childhoodPhoto.classList.add('zoom-active');
+      if (lipsPhoto) lipsPhoto.classList.add('fade-active');
+      if (touchGlow) touchGlow.classList.add('glow-active');
+      
+      if (touchHearts) {
+        for (let i = 0; i < 8; i++) {
+          setTimeout(() => {
+            const heart = document.createElement('span');
+            heart.className = 'floating-heart';
+            heart.textContent = '♡';
+            heart.style.position = 'absolute';
+            heart.style.fontSize = (8 + Math.random() * 12) + 'px';
+            heart.style.color = 'var(--rose)';
+            heart.style.opacity = '1';
+            heart.style.animation = `floatingHeart ${1.2 + Math.random() * 0.8}s ease-out forwards`;
+            heart.style.left = (Math.random() * 40 - 20) + 'px';
+            heart.style.top = (Math.random() * 40 - 20) + 'px';
+            heart.style.zIndex = '2';
+            touchHearts.appendChild(heart);
+            setTimeout(() => heart.remove(), 2000);
+          }, i * 150);
+        }
+      }
+      
+      burstHearts(16);
+    }, 100);
   }
 });
 
-// Replay
 replayButton.addEventListener('click', () => {
   music.currentTime = 0;
   touchCueTriggered = false;
-  touchScene.classList.remove('cue-active');
-  touchFrame.classList.remove('touch-arrived');
   
-  // Reset animations
+  const touchComposite = touchScene.querySelector('.touch-composite');
   const childhoodPhoto = touchScene.querySelector('.childhood-photo');
   const lipsPhoto = touchScene.querySelector('.lips-photo');
   const touchGlow = touchScene.querySelector('.touch-glow');
   const touchHearts = touchScene.querySelector('.touch-hearts');
   
+  if (touchComposite) touchComposite.classList.remove('touch-arrived');
   if (childhoodPhoto) childhoodPhoto.classList.remove('zoom-active');
   if (lipsPhoto) lipsPhoto.classList.remove('fade-active');
   if (touchGlow) touchGlow.classList.remove('glow-active');
@@ -209,7 +204,6 @@ replayButton.addEventListener('click', () => {
   burstHearts(5);
 });
 
-// Intersection observer for animations
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
@@ -221,7 +215,6 @@ const observer = new IntersectionObserver((entries) => {
 
 scenes.forEach((scene) => observer.observe(scene));
 
-// Click for hearts
 document.addEventListener('pointerdown', (event) => {
   if (event.target.closest('button') || event.target.closest('.music-control')) return;
   if (Math.random() > 0.72) createHeart(event.clientX, event.clientY);
